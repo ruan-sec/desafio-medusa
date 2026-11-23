@@ -28,6 +28,7 @@ desafio-medusa/
 │   ├── users.txt
 │   └── passwords.txt
 └── README.md
+```
 
 ---
 
