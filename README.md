@@ -10,25 +10,25 @@ Laboratório que montei no VirtualBox para testar na prática ataques de força 
 ## Passo 1 — Mapeando o alvo com o Nmap
 Primeiro rodei um scan para confirmar o IP da máquina alvo e ver quais portas estavam abertas na rede:
 
-![Scan do Nmap](imagens/01-nmap-scan.jpg)
+![Scan do Nmap](images/01-nmap-scan.jpg)
 
 ## Passo 2 — Força bruta no serviço FTP
 Com a porta 21 (FTP) aberta, rodei o Medusa usando minhas listas de usuários e senhas e depois validei o acesso com a credencial encontrada:
 
     medusa -h 192.168.3.150 -U usuarios.txt -P senhas.txt -M ftp
 
-![Ataque Medusa no FTP](imagens/02-medusa-ftp.jpg)
+![Ataque Medusa no FTP](images/02-medusa-ftp.jpg)
 
-![Validação do acesso FTP](imagens/03-ftp-validacao.jpg)
+![Validação do acesso FTP](images/03-ftp-validacao.jpg)
 
 ## Passo 3 — Força bruta no formulário web (DVWA)
 Depois testei o ataque contra a página de login do DVWA (com segurança configurada em *Low*), capturando os cookies e cabeçalhos HTTP para passar os parâmetros certos ao Medusa:
 
-![Segurança Low no DVWA](imagens/04-dvwa-segurança-low.jpg)
+![Segurança Low no DVWA](images/04-dvwa-segurança-low.jpg)
 
-![Cookies do DVWA](imagens/05-dvwa-cookies.jpg)
+![Cookies do DVWA](images/05-dvwa-cookies.jpg)
 
-![Cabeçalhos HTTP](imagens/06-dvwa-http-headers.jpg)
+![Cabeçalhos HTTP](images/06-dvwa-http-headers.jpg)
 
 ## O que aprendi (Defesa)
 * Senhas fracas caem rápido quando não existe limite de tentativas nem bloqueio no servidor.
