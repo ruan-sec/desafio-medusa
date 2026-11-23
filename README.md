@@ -1,19 +1,35 @@
 # Desafio Medusa
 
-Laboratório que montei no VirtualBox para testar na prática como funciona um ataque de dicionário usando o Medusa e como proteger o servidor contra esse tipo de tentativa.
+Laboratório que montei no VirtualBox para testar na prática ataques de força bruta usando o Medusa (tanto em FTP quanto em formulário web no DVWA) e entender como proteger os serviços contra esse tipo de tentativa.
 
 ## Ambiente usado
 * Kali Linux (máquina atacante)
-* Ubuntu Server 192.168.3.150 e DVWA / Metasploitable 2 (alvos em rede isolada)
+* Metasploitable 2 / DVWA (alvos em rede isolada)
 * Nmap e Medusa
 
-## O que fiz no lab
-1. Rodei o Nmap para mapear o IP do alvo e ver as portas abertas (SSH, FTP e HTTP).
-2. Criei duas listas simples de usuários e senhas para o teste.
-3. Executei o Medusa no Kali para testar o acesso ao serviço:
+## Passo 1 — Mapeando o alvo com o Nmap
+Primeiro rodei um scan para confirmar o IP da máquina alvo e ver quais portas estavam abertas na rede:
 
-    medusa -h 192.168.3.150 -U usuarios.txt -P senhas.txt -M ssh
+![Scan do Nmap](imagens/01-nmap-scan.jpg)
+
+## Passo 2 — Força bruta no serviço FTP
+Com a porta 21 (FTP) aberta, rodei o Medusa usando minhas listas de usuários e senhas e depois validei o acesso com a credencial encontrada:
+
+    medusa -h 192.168.3.150 -U usuarios.txt -P senhas.txt -M ftp
+
+![Ataque Medusa no FTP](imagens/02-medusa-ftp.jpg)
+
+![Validação do acesso FTP](imagens/03-ftp-validacao.jpg)
+
+## Passo 3 — Força bruta no formulário web (DVWA)
+Depois testei o ataque contra a página de login do DVWA (com segurança configurada em *Low*), capturando os cookies e cabeçalhos HTTP para passar os parâmetros certos ao Medusa:
+
+![Segurança Low no DVWA](imagens/04-dvwa-segurança-low.jpg)
+
+![Cookies do DVWA](imagens/05-dvwa-cookies.jpg)
+
+![Cabeçalhos HTTP](imagens/06-dvwa-http-headers.jpg)
 
 ## O que aprendi (Defesa)
-* Senhas fracas caem rápido se o servidor não tiver bloqueio de tentativas.
-* Para evitar isso na prática: ativar o Fail2Ban para bloquear IPs após erros seguidos, desativar login por senha no SSH (usar chave Ed25519) e manter o firewall UFW ativo.
+* Senhas fracas caem rápido quando não existe limite de tentativas nem bloqueio no servidor.
+* Para evitar isso na prática: usar bloqueio automático de IP após erros seguidos (como o Fail2Ban), exigir senhas fortes, ativar autenticação em dois fatores (MFA) e monitorar os logs de acesso.
